@@ -1,0 +1,10 @@
+https://www.buybitcoinworldwide.com/wallets/
+
+https://www.ibm.com/developerworks/library/j-chaincode-for-java-developers/index.html
+
+
+geth --rinkeby --datadir /home/sameer/Desktop/Geth\ Blockchain/ --fast --cache=1024 --port 30303 --rpc --rpcaddr 127.0.0.1 --rpcport 8545 --rpccorsdomain *
+
+
+
+sudo geth attach ipc://home/rohan/Ethereum/privateNet/MyPrivateNet/geth.ipc

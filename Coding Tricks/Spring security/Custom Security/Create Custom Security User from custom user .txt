@@ -1,0 +1,23 @@
+public static CustomUser create(User user) {
+        return new CustomUser(
+                user.getId(),
+                user.getUsername(),
+                user.getFirstname(),
+                user.getLastname(),
+                user.getEmail(),
+                user.getPassword(),
+                mapToGrantedAuthorities(user.getAuthorities()),
+                user.getEnabled(),
+                user.getLastPasswordResetDate()
+        );
+    }
+
+    private static List<GrantedAuthority> mapToGrantedAuthorities(List<Authority> authorities) {
+    	
+    	List<GrantedAuthority> grantedAuthorits = new ArrayList<GrantedAuthority>();
+    	for(Authority authority : authorities ){
+    		grantedAuthorits.add(new SimpleGrantedAuthority(authority.getName().name()));
+    	}
+    	
+       return grantedAuthorits;
+    }

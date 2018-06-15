@@ -1,0 +1,40 @@
+	@Override
+	public User findByUsername(String username) {
+		return getUser(username);
+	}
+
+	public User getUser(String username){
+		String[] credentials = username.split(":");
+		User user = null;
+		if (credentials.length == RestConstants.AUTH_STRING_LENGTH){
+			Contact	contact = authenticationService.logContactWithCredential(credentials[0], credentials[1]);
+			if(contact!=null){
+			contactDetailsProvider.setContact(contact);
+			user = new User();
+			user.setId((long) contact.getId());
+			user.setEmail(contact.getLogin());
+			user.setFirstname(contact.getVorname());
+			user.setLastname(contact.getName());
+			user.setPassword(contact.getPassword());
+			user.setAuthorities(getAuthority(contact));
+			user.setEnabled(contact.isActive());
+			user.setUsername(contact.getLogin());
+			}
+		}
+		return user;
+		
+	}
+
+	private List<Authority> getAuthority(Contact contact) {
+		List<Authority> authoritries = new ArrayList<>();
+		Authority authority = new Authority();
+		authority.setId(1L);
+		if(contact.isBuyer()){
+		authority.setName(AuthorityName.ROLE_BUYER);
+		}else{
+			authority.setName(AuthorityName.ROLE_SUPPLIER);
+		}
+		authoritries.add(authority);
+		return authoritries;
+
+	}

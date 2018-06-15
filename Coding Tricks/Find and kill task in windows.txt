@@ -1,0 +1,6 @@
+To find the task with there port numbers:-
+
+1. netstat -a -o -n    ( To list the process with ip & port number )
+
+
+2. taskkill /F /PID 28344        ( To kil a task )

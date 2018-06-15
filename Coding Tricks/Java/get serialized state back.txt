@@ -1,0 +1,17 @@
+use below methods to directly change the instance or its properties when deserlization.
+
+   /**
+    *customize Serialization process.
+    */
+   private void readObject( ObjectInputStream ois ) throws IOException, ClassNotFoundException
+   {
+      System.out.println( "in readObject()" );
+      ois.defaultReadObject();
+      instance = this; //rather than creating new instance, assign current object to INSTANCE
+   }
+
+   private Object readResolve() throws ObjectStreamException
+   {
+      System.out.println( "in readresolve" );
+      return instance;
+   }

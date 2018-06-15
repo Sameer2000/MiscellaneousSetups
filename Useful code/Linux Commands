@@ -1,0 +1,28 @@
+### Useful Linux Commands
+
+1. setup java home.
+
+a) move jdk folder to /usr/local/java/
+
+b) sudo gedit /etc/profile
+
+JAVA_HOME=/usr/local/java/jdk1.7.0_45
+PATH=$PATH:$JAVA_HOME/bin
+export JAVA_HOME
+export PATH
+
+
+c) to update path variables as "auto mode"
+sudo update-alternatives --install "/usr/bin/java" "java" "/usr/local/java/jdk1.7.0_45/jre/bin/java" 1
+
+
+
+## To free 8080 port.
+sudo fuser -n tcp -k 8080
+
+2. To check logs
+tail -200f abc.logs
+tail nohup.out
+
+2. Filter process
+ps -aux | grep postgres

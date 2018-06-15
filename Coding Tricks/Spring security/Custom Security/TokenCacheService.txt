@@ -1,0 +1,86 @@
+package com.mfg.quality.cache;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+/**
+ * The Class TokenCacheService.
+ */
+@Component
+public class TokenCacheService
+{
+
+   /** Logger for this classs. */
+   private final Logger LOGGER = Logger.getLogger( TokenCacheService.class );
+
+   /** The access token. */
+   private final String ACCESS_TOKEN = "ACCESS_TOKEN";
+
+   /** The client object. */
+   @Autowired
+   TokenCacheClient tokenCacheClient;
+
+   /**
+    * for getting cache object.
+    *
+    * @param id the id
+    * @return the cache object
+    * @throws Exception the exception
+    */
+   public Object getCacheObject( String id ) throws Exception
+   {
+      Object obj = null;
+      if ( tokenCacheClient.isEnabled() )
+      {
+         obj = tokenCacheClient.get( ACCESS_TOKEN, id );
+      }
+      return obj;
+   }
+
+   /**
+    * Sets the cache object.
+    *
+    * @param id the id
+    * @param obj the obj
+    */
+   public void setCacheObject( String id, Object obj )
+   {
+      if ( tokenCacheClient.isEnabled() )
+      {
+         try
+         {
+            tokenCacheClient.put( ACCESS_TOKEN, id, obj, 5000 );
+         }
+         catch ( Exception e )
+         {
+            // TODO: handle exception
+
+         }
+
+      }
+   }
+
+   /**
+    * Removes the cache object.
+    *
+    * @param id the id
+    */
+   public void removeCacheObject( String id )
+   {
+      if ( tokenCacheClient.isEnabled() )
+      {
+         try
+         {
+            tokenCacheClient.evict( ACCESS_TOKEN, id );
+         }
+         catch ( Exception e )
+         {
+            // TODO: handle exception
+            LOGGER.error("Exception occured while removing object from cache!!!");
+         }
+
+      }
+   }
+
+}

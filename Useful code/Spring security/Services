@@ -1,0 +1,43 @@
+	/**
+	 * Save roles with new permission in bootstrap
+	 */
+	public void saveDefaultRoleWithPermission() {
+		List<RolePermissionMapping> rolePermissionList = rolePermissionMappingRepository.findAll();
+		if (rolePermissionList.size() == 0) {
+			Set<RolePermissionMapping> currentMappedPermissions = PermissionAssigner.getAllMappedPermissions();
+			rolePermissionMappingRepository.save(currentMappedPermissions);
+			log.info("Saved default permission with role");
+		} else {
+			log.info("Already have roles with permission");
+			log.info("Updating existing role permission");
+			for (RolePermissionMapping mappedPermissions : rolePermissionList) {
+				Set<Permission> newPermission = new HashSet<Permission>();
+				Set<Permission> currentPermission = new HashSet<Permission>();
+				Set<Permission> permissionToRemove = new HashSet<Permission>();
+				if (mappedPermissions.getRole().equals(DefaultRole.ROLE_USER.toString())) {
+					currentPermission = new HashSet<Permission>(PermissionAssigner.getUserPermissions());
+				}
+				if (mappedPermissions.getRole().equals(DefaultRole.ROLE_DELEGATE_ADMIN.toString())) {
+					currentPermission = new HashSet<Permission>(PermissionAssigner.getDelegateAdminPermissions());
+				}
+				if (mappedPermissions.getRole().equals(DefaultRole.ROLE_SUPER_ADMIN.toString())) {
+					currentPermission = new HashSet<Permission>(PermissionAssigner.getSuperAdminPermissions());
+				}
+				String[] roleStringArray = Arrays.stream(DefaultRole.values()).map(DefaultRole::name).toArray(String[]::new);
+				if (Arrays.asList(roleStringArray).contains(mappedPermissions.getRole())) {
+					Set<Permission> databasePermissionCopy = new HashSet<Permission>(mappedPermissions.getPermissions());
+					databasePermissionCopy.removeAll(currentPermission);
+					permissionToRemove = databasePermissionCopy;
+					log.info("Removing old permission for " + mappedPermissions.getRole() + " :" + permissionToRemove);
+					currentPermission.removeAll(mappedPermissions.getPermissions());
+					newPermission = currentPermission;
+					log.info("Adding new permission for " + mappedPermissions.getRole() + " :" + newPermission);
+					Set<Permission> actualDatabasePermission = mappedPermissions.getPermissions();
+					actualDatabasePermission.addAll(newPermission);
+					actualDatabasePermission.removeAll(permissionToRemove);
+				}
+			}
+			rolePermissionMappingRepository.save(rolePermissionList);
+			log.info("Permission update operation has been completed");
+		}
+	}

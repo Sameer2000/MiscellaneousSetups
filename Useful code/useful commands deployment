@@ -1,0 +1,39 @@
+/** App Deployment Machine  **/
+ssh -i specterex-staging-app.pem ubuntu@13.229.52.139
+
+mvn install -D "spring.profiles.active=stag"
+
+/** change date accordingly **/
+cp target/specterex-backend-0.0.1-SNAPSHOT.jar specterex-backend-31-MAY-18-0.0.1-SNAPSHOT.jar
+
+mv specterex-backend-31-MAY-18-0.0.1-SNAPSHOT.jar /opt/specBuild/
+
+--Go to SPECBUILD:
+
+kill -9 $(pgrep java)
+
+/** To find pid by port **/
+netstat -tunlp | grep 8080
+
+kill -9 pid
+
+
+
+nohup java -jar -D"spring.profiles.active=stag"  specterex-backend-0.0.1-SNAPSHOT.jar  & tailf nohup.out
+
+
+/** Database Machine **/
+ssh -i specterex-staging-db.pem ubuntu@13.228.168.12
+sudo su postgres 
+
+/** Bitcoin Machine **/
+ssh -i specterex-staging-bitcoin.pem ubuntu@54.255.212.97
+
+
+/** Etherium Machine **/
+ssh -i specterex-staging-ethereum.pem ubuntu@54.169.54.176
+sudo docker exec -it f sh
+
+
+/** filter process by postgres **/
+ps -aux | grep postgres

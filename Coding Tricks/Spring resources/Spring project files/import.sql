@@ -1,0 +1,5 @@
+insert into person ( name, address, zipcode, home_address, home_zipcode ) values ( 'abc', 'gurgaon', 12001, 'dwarka', 112336 )
+insert into person ( name, address, zipcode, home_address, home_zipcode ) values ( 'pqr', 'geeta colony', 112201, 'ssada', 112322 )
+insert into person ( name, address, zipcode, home_address, home_zipcode ) values ( 'mno', 'mumbai', 110022, 'sfdgdfggh', 112333 )
+insert into person ( name, address, zipcode, home_address, home_zipcode ) values ( 'xyz', 'noida', 12051, 'ppppp', 1123355 )
+insert into person ( name, address, zipcode, home_address, home_zipcode ) values ( 'fgh', 'janakpuri', 120030, 'aaaa', 112377 )
